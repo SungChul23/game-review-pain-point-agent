@@ -20,7 +20,7 @@ START
   ↓
 fetch_reviews        # 구글 플레이 리뷰 수집
   ↓
-filter_negative      # 부정 리뷰 필터 (별점 2 이하)
+filter_negative      # 부정 리뷰 필터 (별점 2 이하 + 감성 분석)
   ↓ (부족하면 재수집)
 embed_and_store      # 임베딩 → Chroma DB 저장
   ↓
@@ -42,6 +42,7 @@ END
 | 에이전트 프레임워크 | LangGraph |
 | LLM | GPT-3.5 Turbo (OpenAI) |
 | 임베딩 | jhgan/ko-sroberta-multitask (HuggingFace) |
+| 감성 분석 | daekeun-ml/koelectra-small-v3-nsmc (HuggingFace) |
 | 벡터 DB | Chroma DB |
 | 리뷰 수집 | google-play-scraper |
 | 언어 | Python 3.11 |
@@ -56,11 +57,10 @@ pain_point_agent/
 ├── nodes.py       # 6개 노드 함수
 ├── graph.py       # StateGraph 조립
 ├── main.py        # 실행 진입점
+├── games.py       # 분석 가능한 게임 목록
 ├── .env           # API 키 (git 제외)
 └── requirements.txt
 ```
-
-
 
 ---
 
@@ -124,11 +124,11 @@ Pain Point + 개선 제안 반환
 - 게임이 DB에 없으면 자동 크롤링 후 분석
 - 게임이 있으면 기존 Chroma DB에서 바로 검색
 
-### 3단계 — 기능 고도화 (예정)
+### 3단계 — 기능 고도화
 
+- [o] 별점 필터 정확도 부족 → 한국어 감성 분석 모델 추가 (daekeun-ml/koelectra-small-v3-nsmc)
 - [ ] 앱스토어 리뷰 수집 추가
 - [ ] LLM 게임 도메인 지식 부족 → game_knowledge DB + Tavily 웹서치 노드 추가
-- [ ] 별점 필터 정확도 부족 → 한국어 감성 분석 모델 추가 (snunlp/KR-FinBert-SC)
 
 ---
 
